@@ -8,10 +8,13 @@ import (
 	"strconv"
 )
 
-
 func (app *application) home(w http.ResponseWriter, r *http.Request) {
 
-	files := []string{"ui/html/pages/base.tmpl.html", "ui/html/pages/home.tmpl.html", "ui/html/partials/nav.tmpl.html"}
+	files := []string{
+		"ui/html/pages/base.tmpl.html",
+		"ui/html/pages/home.tmpl.html",
+		"ui/html/partials/nav.tmpl.html",
+	}
 
 	t, err := template.ParseFiles(files...)
 	if err != nil {
@@ -36,7 +39,6 @@ func (app *application) snippetView(w http.ResponseWriter, r *http.Request) {
 
 	fmt.Fprintf(w, "Display a specific snippet with ID %d...", id)
 }
-
 
 func (app *application) snippetCreate(w http.ResponseWriter, r *http.Request) {
 

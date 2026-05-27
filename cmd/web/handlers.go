@@ -3,7 +3,6 @@ package main
 import (
 	"errors"
 	"fmt"
-	_ "html/template"
 	"net/http"
 	"strconv"
 
@@ -17,25 +16,10 @@ func (app *application) home(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	for _, snippet := range snippets {
-		fmt.Fprintf(w, "%+v\n", snippet)
-	}
-	//
-	// files := []string{
-	// 	"ui/html/pages/base.tmpl.html",
-	// 	"ui/html/pages/home.tmpl.html",
-	// 	"ui/html/partials/nav.tmpl.html",
-	// }
-	//
-	// t, err := template.ParseFiles(files...)
-	// if err != nil {
-	// 	app.serverError(w, r, err)
-	// 	return
-	// }
-	// err = t.ExecuteTemplate(w, "base", nil)
-	// if err != nil {
-	// 	app.serverError(w, r, err)
-	// }
+	data := app.newTemplateData(r)
+	data.Snippets = snippets
+
+	app.render(w, r, http.StatusOK, "home.tmpl.html", data) 
 }
 
 func (app *application) snippetView(w http.ResponseWriter, r *http.Request) {
@@ -54,8 +38,11 @@ func (app *application) snippetView(w http.ResponseWriter, r *http.Request) {
 		}
 		return
 	}
-	
-	fmt.Fprintf(w, "%+v", snippet)
+
+	data := app.newTemplateData(r)
+	data.Snippet = snippet
+
+	app.render(w, r, http.StatusOK, "view.tmpl.html", data) 
 }
 
 func (app *application) snippetCreate(w http.ResponseWriter, r *http.Request) {
